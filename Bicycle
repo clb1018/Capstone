@@ -36,8 +36,6 @@ colnames(m10_2020)
 colnames(m11_2020)
 colnames(M12_2020)
 
-# Rename columns  to make them consisent with q1_2020 (as this will be the supposed going-forward table design for Divvy)
-# Don't think this is necessary with the most recent data as of 4.17.2021
 
 (q4_2019 <- rename(q4_2019
                    ,ride_id = trip_id
@@ -86,7 +84,6 @@ str(m10_2020)
 str(m11_2020)
 str(M12_2020)
 
-# Convert ride_id and rideable_type to character so that they can stack correctly
 
 m1_2021 <-  mutate(m1_2021, ride_id = as.character(ride_id)
                    ,rideable_type = as.character(rideable_type)) 
@@ -119,8 +116,6 @@ m12_2020 <-  mutate(M12_2020, ride_id = as.character(ride_id)
 all_trips <- bind_rows(m1_2021, m2_2021, m3_2021, m4_2020, m5_2020, m6_2020, m7_2020, m8_2020,
                        m9_2020, m10_2020, m11_2020, m12_2020)
 
-# Got an error since it looks like a couple columns are not matching. Running a different mutate script.
-# Here making all start_station_id = col_double(), and end_station_id = col_double(), some have it as character
 
 m1_2021 <-  mutate(m1_2021, start_station_id = as.double(start_station_id)
                    ,end_station_id = as.double(end_station_id)) 
@@ -279,12 +274,3 @@ all_trips_v2 %>%
   ggplot(aes(x = weekday, y = average_duration, fill = member_casual)) +
   geom_col(position = "dodge")
 
-#=================================================
-# STEP 5: EXPORT SUMMARY FILE FOR FURTHER ANALYSIS
-#=================================================
-# Create a csv file that we will visualize in Excel, Tableau, or my presentation software
-# N.B.: This file location is for a Mac. If you are working on a PC, change the file location accordingly (most likely "C:\Users\YOUR_USERNAME\Desktop\...") to export the data. You can read more here: https://datatofish.com/export-dataframe-to-csv-in-r/
-counts <- aggregate(all_trips_v2$ride_length ~ all_trips_v2$member_casual + all_trips_v2$day_of_week, FUN = mean)
-write.csv(counts, file = 'C:/Users/jedga/Desktop/Capstone/avg_ride_length.csv')
-
-#You're done! Congratulations!
